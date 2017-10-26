@@ -1,0 +1,22 @@
+{
+  "name": "tweet-generator",
+  "version": "1.0.0",
+  "description": "A naive tweet generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuheng08/tweet-generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yuheng08/tweet-generator/issues"
+  },
+  "homepage": "https://github.com/yuheng08/tweet-generator#readme",
+  "dependencies": {
+    "fast-csv": "^2.4.1"
+  }
+}
