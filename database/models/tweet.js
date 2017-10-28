@@ -11,6 +11,9 @@ const Tweet = sequelize.define('tweet', {
   geolocation: {
     type: Sequelize.GEOMETRY('POINT')
   }
+},
+{
+  timestamps: false
 });
 
 module.exports = Tweet;
