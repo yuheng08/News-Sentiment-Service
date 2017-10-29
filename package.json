@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/yuheng08/tweet-generator#readme",
   "dependencies": {
-    "fast-csv": "^2.4.1"
+    "fast-csv": "^2.4.1",
+    "sequelize": "^4.19.0",
+    "pg": "^6.4.2"
   }
 }
