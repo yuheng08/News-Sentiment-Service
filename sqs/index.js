@@ -1,9 +1,9 @@
 const AWS = require('aws-sdk');
-const { queueURL, queueReadParams } = require('../config/config.js');
+const { QUEUE_URL, queueReadParams } = require('../config/config.js');
 AWS.config.loadFromPath('config/sqs.json');
 const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 
-const getFormattedAttributes = function ({ text, timestamp, geolocation }) {
+const getFormattedAttributes = function ({ timestamp, geolocation }) {
   return {
     timestamp: {
       DataType: 'String',
@@ -19,7 +19,7 @@ const getFormattedAttributes = function ({ text, timestamp, geolocation }) {
 const sendToQueue = function (tweet) {
   const queueWriteParams = {
     MessageBody: tweet.text,
-    QueueUrl: queueURL,
+    QueueUrl: QUEUE_URL,
     MessageAttributes: getFormattedAttributes(tweet)
   };
 
@@ -38,6 +38,22 @@ const getFromQueue = function (callback) {
       console.log('Receive Error', err);
     } else {
       callback(data);
+      data.Messages.forEach(message => deleteFromQueue(message));
+    }
+  });
+};
+
+const deleteFromQueue = function (message) {
+  const deleteParams = {
+    QueueUrl: QUEUE_URL,
+    ReceiptHandle: message.ReceiptHandle
+  };
+
+  sqs.deleteMessage(deleteParams, function (err, data) {
+    if (err) {
+      console.log('Delete error', err);
+    } else {
+      console.log('Message deleted', data);
     }
   });
 };
