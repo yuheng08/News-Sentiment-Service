@@ -6,7 +6,7 @@ const { sendToQueue } = require('../sqs/index');
 
 const PORT = process.env.PORT || 3000;
 
-if (cluster.isMaster) {
+const createWorkers = function () {
   const numCPUs = require('os').cpus().length;
 
   for (let i = 0; i < numCPUs; i++) {
@@ -16,7 +16,9 @@ if (cluster.isMaster) {
   cluster.on('exit', (worker, code, signal) => {
     console.log(`worker ${worker.process.pid} died`);
   });
-} else {
+};
+
+const handleRequests = function () {
   const app = express();
 
   app.use(morgan('tiny'));
@@ -26,9 +28,15 @@ if (cluster.isMaster) {
     sendToQueue(req.body);
     res.end();
   });
-  
+
   app.listen(PORT, function () {
     console.log(`${process.pid} is listening on port ${PORT}!`);
   });
+};
+
+if (cluster.isMaster) {
+  createWorkers();
+} else {
+  handleRequests();
 }
 
