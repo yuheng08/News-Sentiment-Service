@@ -2,14 +2,13 @@ const cluster = require('cluster');
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const { sendToQueue } = require('../sqs/index');
 
 const PORT = process.env.PORT || 3000;
 
 if (cluster.isMaster) {
   const numCPUs = require('os').cpus().length;
 
-  console.log(`Master ${process.pid} is running`);
-  // Fork workers.
   for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
@@ -23,10 +22,8 @@ if (cluster.isMaster) {
   app.use(morgan('tiny'));
   app.use(bodyParser.json());
 
-  console.log(`Worker ${process.pid} started`);
   app.post('/tweets', function (req, res) {
-    console.log(req.body);
-    console.log(`Process ${process.pid} is working...`);
+    sendToQueue(req.body);
     res.end();
   });
   

@@ -37,7 +37,7 @@ const getFromQueue = function (callback) {
     if (err) {
       console.log('Receive Error', err);
     } else {
-      callback(data);
+      callback(data.Messages);
       data.Messages.forEach(message => deleteFromQueue(message));
     }
   });
@@ -57,8 +57,6 @@ const deleteFromQueue = function (message) {
     }
   });
 };
-
-getFromQueue(data => console.log(data));
 
 module.exports = {
   sendToQueue,
