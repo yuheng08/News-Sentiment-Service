@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
-const { QUEUE_URL, queueReadParams } = require('../config/config.js');
-AWS.config.loadFromPath('config/sqs.json');
+const { TWEET_QUEUE_URL, queueReadParams } = require('../config/config.js');
+AWS.config.loadFromPath('config/config.json');
 const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 
 const getFormattedAttributes = function ({ timestamp, geolocation }) {
@@ -16,10 +16,10 @@ const getFormattedAttributes = function ({ timestamp, geolocation }) {
   };
 };
 
-const sendToQueue = function (tweet) {
+const enqueueTweet = function (tweet) {
   const queueWriteParams = {
     MessageBody: tweet.text,
-    QueueUrl: QUEUE_URL,
+    QueueUrl: TWEET_QUEUE_URL,
     MessageAttributes: getFormattedAttributes(tweet)
   };
 
@@ -32,7 +32,7 @@ const sendToQueue = function (tweet) {
   });
 };
 
-const getFromQueue = function (callback) {
+const dequeueTweets = function (callback) {
   sqs.receiveMessage(queueReadParams, function (err, data) {
     if (err) {
       console.log('Receive Error', err);
@@ -45,7 +45,7 @@ const getFromQueue = function (callback) {
 
 const deleteFromQueue = function (message) {
   const deleteParams = {
-    QueueUrl: QUEUE_URL,
+    QueueUrl: TWEET_QUEUE_URL,
     ReceiptHandle: message.ReceiptHandle
   };
 
@@ -59,6 +59,6 @@ const deleteFromQueue = function (message) {
 };
 
 module.exports = {
-  sendToQueue,
-  getFromQueue
+  enqueueTweet,
+  dequeueTweets
 };

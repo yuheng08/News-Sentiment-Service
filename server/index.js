@@ -2,7 +2,7 @@ const cluster = require('cluster');
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const { sendToQueue } = require('../sqs/index');
+const { enqueueTweet } = require('../utils/tweet_sqs');
 
 const PORT = process.env.PORT || 3000;
 
@@ -25,7 +25,7 @@ const handleRequests = function () {
   app.use(bodyParser.json());
 
   app.post('/tweets', function (req, res) {
-    sendToQueue(req.body);
+    enqueueTweet(req.body);
     res.end();
   });
 
