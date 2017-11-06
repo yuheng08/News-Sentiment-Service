@@ -1,5 +1,5 @@
 const cluster = require('cluster');
-const { getFromQueue } = require('../sqs/index');
+const { dequeueTweets } = require('../utils/tweet_sqs.js');
 
 const createWorkers = function () {
   const numCPUs = require('os').cpus().length;
@@ -14,7 +14,7 @@ const createWorkers = function () {
 };
 
 const processTweets = function () {
-  getFromQueue(function (tweets) {
+  dequeueTweets(function (tweets) {
     tweets.forEach(tweet => console.log(tweet));
   });
 };
