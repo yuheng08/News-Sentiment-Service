@@ -3,6 +3,10 @@ config/development.json
 config/production.json
 config/staging.json
 config/test.json
+config/
+
+#vscode config
+.vscode
 
 # OS X
 .DS_Store
