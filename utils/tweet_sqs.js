@@ -26,8 +26,6 @@ const enqueueTweet = function (tweet) {
   sqs.sendMessage(queueWriteParams, function (err, data) {
     if (err) {
       console.log('Error', err);
-    } else {
-      console.log('Success', data.MessageId);
     }
   });
 };
@@ -52,8 +50,6 @@ const deleteFromQueue = function (message) {
   sqs.deleteMessage(deleteParams, function (err, data) {
     if (err) {
       console.log('Delete error', err);
-    } else {
-      console.log('Message deleted', data);
     }
   });
 };

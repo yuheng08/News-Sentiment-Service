@@ -67,11 +67,12 @@ const generateTweet = function (roster) {
 
 const startGeneration = async function () {
   const roster = await getRoster();
-
-  setInterval(() => {
-    let tweet = generateTweet(roster);
+  let tweet = generateTweet(roster);
+  
+  const id = setInterval(() => {
+    tweet = generateTweet(roster);
     sendTweet(tweet);
-  }, 1000);
+  }, 0);
 };
 
 startGeneration();
