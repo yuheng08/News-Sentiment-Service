@@ -5,6 +5,9 @@ config/staging.json
 config/test.json
 config/
 
+#experimental code
+sample.js
+
 #vscode config
 .vscode
 
